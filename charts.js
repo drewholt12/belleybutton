@@ -65,41 +65,64 @@ function buildCharts(sample) {
     var firstSample = sampleNumber[0];
     
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
-    var otu_ids = sampleNumber.map(sample => sample.otu_ids);
-    var otu_labels = sampleNumber.map(sample => sample.otu_labels).slice(0,10).reverse();
-    var sample_values = sampleNumber.map(sample => sample.sample_values).slice(0,10).reverse();
-    console.log(otu_ids);
-    console.log((sample_values));
-    console.log(otu_labels);
+    var otuIds = sampleNumber.map(sample => sample.otu_ids);
+    var otuLabels = sampleNumber.map(sample => sample.otu_labels);
+    var sampleValues = parseint(sampleNumber.map(sample => sample.sample_values));
+    console.log(otuIds);
+    console.log(otuLabels);
+    console.log(sampleValues);
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
     
     
-    var topten = otu_ids.sort((a,b) => (b-a));
-    console.log(topten)
+    var topTen = otuIds.sort((a,b) => (b.otu_ids- a.otu_ids)).slice(0, 10);
+    console.log(topTen)
 
-    var yticks = topten.slice(0,10).reverse();
-    console.log(yticks);
+    var yticks = topTen.reverse();
+    // console.log(yticks);
     // 8. Create the trace for the bar chart. 
     var trace = {
       type: "bar",
-      x: sample_values,
-      y: yticks.reverse(),     
-      text: otu_labels, 
-      marker: {
-        color: "#17BECF",
-      orientation : 'h'
-      }
+      x: sampleValues,
+      y: yticks,     
+      text: otuLabels, 
+      orientation :"h"
     };
     var barData = [trace];
     // 9. Create the layout for the bar chart. 
     var barLayout = {
       title : "Top 10 Bacteria Cultures Found",
-      xlabel : {title : "Sample Value"},
-      ylabel : {title : "OTU ID"}
+      xaxis : {title : "Sample Value"},
+      yaxis : {title : "OTU ID"}
     };
     // 10. Use Plotly to plot the data with the layout. 
     Plotly.newPlot("bar", barData, barLayout);
+
+
+    // create bubble plot
+    // 1. Create the trace for the bubble chart.
+    var trace2 = {
+      type: "bubble",
+      x: yticks,
+      y: sampleValues,
+      text: otuLabels,
+      mode: 'markers',
+      markers = dict(
+        size = sampleValues,
+        color = yticks,
+        colorscale= sequential,
+      )
+    };
+    var bubbleData = [trace2]
+    // 2. Create the layout for the bubble chart.
+    var bubbleLayout = {
+      title : "Top 10 Bacteria Cultures",
+      xaxis : {title : "OTU IDs"},
+      yaxis : {title : "Sample Value"}
+    };
+
+    // 3. Use Plotly to plot the data with the layout.
+    Plotly.newPlot("bubble", bubbleData, bubbleLayout);
   });
 }
