@@ -67,7 +67,7 @@ function buildCharts(sample) {
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var otuIds = sampleNumber.map(sample => sample.otu_ids);
     var otuLabels = sampleNumber.map(sample => sample.otu_labels);
-    var sampleValues = parseint(sampleNumber.map(sample => sample.sample_values));
+    var sampleValues = sampleNumber.map(sample => sample.sample_values);
     console.log(otuIds);
     console.log(otuLabels);
     console.log(sampleValues);
@@ -108,11 +108,10 @@ function buildCharts(sample) {
       y: sampleValues,
       text: otuLabels,
       mode: 'markers',
-      markers = dict(
-        size = sampleValues,
-        color = yticks,
-        colorscale= sequential,
-      )
+      marker : {
+        size : sampleValues,
+        color : yticks
+      }
     };
     var bubbleData = [trace2]
     // 2. Create the layout for the bubble chart.
@@ -124,5 +123,34 @@ function buildCharts(sample) {
 
     // 3. Use Plotly to plot the data with the layout.
     Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+
+    // create gauge charts
+    // 1. Create a variable that filters the metadata array for the object with the desired sample number.
+    var metadata = data.metadata;
+    var getWash = metadata.filter(sampleObj => sampleObj.id == sample);
+    console.log(getWash);
+    // 2. Create a variable that holds the first sample in the metadata array.
+    var firstWash = getWash[0];
+
+    // 3. Create a variable that holds the washing frequency.
+    var washNum = parseFloat(getWash.wfreq);
+    // var washFreq = parseFloat(washNum);
+    console.log(washNum);
+    
+    // 4. Create the trace for the gauge chart.
+    // var gaugeData = [
+    // type : "indicator",
+    // mode : "gauge + number",
+    // value : washNum,
+    // title : {'text: "Belley Button Washing Frequency", 'font' : {'size': 24}}
+    // ];
+    
+    // // 5. Create the layout for the gauge chart.
+    // var gaugeLayout = { 
+     
+    // };
+
+    // // 6. Use Plotly to plot the gauge data and layout.
+    // Plotly.newPlot();
   });
 }
