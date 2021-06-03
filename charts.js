@@ -152,7 +152,7 @@ function buildCharts(sample) {
         type : "indicator",
         mode : "gauge+number",
         value : washNum,
-        title : { text: "<b>Belley Button Washing Frequency</b>", 'font' : {'size': 24}},
+        title : { text: "<b>Belly Button Weekly Washing Frequency</b>", 'font' : {'size': 24}},
         gauge: { 
           axis: { visible:true, range: [0,10] },
           bar: { color: "black"},
