@@ -61,32 +61,37 @@ function buildCharts(sample) {
     var samplesArray = data.samples;
     // 4. Create a variable that filters the samples for the object with the desired sample number.
     var sampleNumber = samplesArray.filter(sampleObj => sampleObj.id === sample);
+    console.log(sampleNumber);
     //  5. Create a variable that holds the first sample in the array.
     var firstSample = sampleNumber[0];
-    
+    console.log(firstSample);
+
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var otuIds = sampleNumber.map(sample => sample.otu_ids);
-    var otuLabels = sampleNumber.map(sample => sample.otu_labels);
-    var sampleValues = sampleNumber.map(sample => sample.sample_values);
     console.log(otuIds);
+    
+    var otuLabels = sampleNumber.map(sample => sample.otu_labels);
     console.log(otuLabels);
+    
+    var sampleValues = sampleNumber.map(sample => sample.sample_values);
     console.log(sampleValues);
+    
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
     
-    
-    var topTen = otuIds.sort((a,b) => (b.otu_ids- a.otu_ids)).slice(0, 10);
-    console.log(topTen)
+    var topTen = otuIds.sort((a,b) => (b.otuIds- a.otuIds));
+    console.log(topTen);
 
-    var yticks = topTen.reverse();
+    var yticks = topTen.slice(0, 10);
+    console.log(yticks);
     // console.log(yticks);
     // 8. Create the trace for the bar chart. 
     var trace = {
       type: "bar",
       x: sampleValues,
       y: yticks,     
-      text: otuLabels, 
+      text: otuLabels,
       orientation :"h"
     };
     var barData = [trace];
@@ -133,7 +138,7 @@ function buildCharts(sample) {
     var firstWash = getWash[0];
 
     // 3. Create a variable that holds the washing frequency.
-    var washNum = parseFloat(getWash.wfreq);
+    var washNum = getWash.wfreq;
     // var washFreq = parseFloat(washNum);
     console.log(washNum);
     
