@@ -97,9 +97,10 @@ function buildCharts(sample) {
     var barData = [trace];
     // 9. Create the layout for the bar chart. 
     var barLayout = {
-      title : "Top 10 Bacteria Cultures Found",
+      title : "<b>Top 10 Bacteria Cultures Found</b>",
       xaxis : {title : "Sample Value"},
-      yaxis : {title : "OTU ID"}
+      yaxis : {title : "OTU ID"},
+      paper_bgcolor: "lightyellow",
     };
     // 10. Use Plotly to plot the data with the layout. 
     Plotly.newPlot("bar", barData, barLayout);
@@ -115,15 +116,17 @@ function buildCharts(sample) {
       mode: 'markers',
       marker : {
         size : sampleValues,
-        color : otuIds
+        color : otuIds,
+        colorscale : "RdBu",
       }
     };
     var bubbleData = [trace2]
     // 2. Create the layout for the bubble chart.
     var bubbleLayout = {
-      title : "Top 10 Bacteria Cultures",
+      title : "<b>Top 10 Bacteria Cultures</b>",
       xaxis : {title : "OTU IDs"},
-      yaxis : {title : "Sample Value"}
+      yaxis : {title : "Sample Value"},
+      paper_bgcolor: "lightyellow",
     };
 
     // 3. Use Plotly to plot the data with the layout.
@@ -149,14 +152,20 @@ function buildCharts(sample) {
         type : "indicator",
         mode : "gauge+number",
         value : washNum,
-        title : { text: "Belley Button Washing Frequency", 'font' : {'size': 24} },
+        title : { text: "<b>Belley Button Washing Frequency</b>", 'font' : {'size': 24}},
         gauge: { 
-          axis: { visible:true, range: [0,9] },
-          bar: { color: "darkblue"},
+          axis: { visible:true, range: [0,10] },
+          bar: { color: "black"},
+          bgcolor: "white",
+          borderwidth: 2,
+          bordercolor: "black",
           steps: [
-            {range: [0, 10], color: "lightblue" },
-          ] },
-          
+            {range: [0, 2], color: "red" },
+            {range: [2, 4], color: "orange" },
+            {range: [4, 6], color: "yellow" },
+            {range: [6, 8], color: "lightgreen" },
+            {range: [8, 10], color: "green" },
+          ]},
     }];
     
     // 5. Create the layout for the gauge chart.
@@ -165,7 +174,7 @@ function buildCharts(sample) {
       height: 400,
       margin: { t: 25, r: 25, l: 25, b: 25 },
       paper_bgcolor: "lightyellow",
-      font: { color: "darkblue", family: "Arial" }
+      font: { color: "black", family: "Arial" }
      
     };
 
