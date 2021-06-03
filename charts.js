@@ -61,30 +61,30 @@ function buildCharts(sample) {
     var samplesArray = data.samples;
     // 4. Create a variable that filters the samples for the object with the desired sample number.
     var sampleNumber = samplesArray.filter(sampleObj => sampleObj.id === sample);
-    console.log(sampleNumber);
+        console.log(sampleNumber);
     //  5. Create a variable that holds the first sample in the array.
     var firstSample = sampleNumber[0];
     console.log(firstSample);
 
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
-    var otuIds = sampleNumber.map(sample => sample.otu_ids);
+    var otuIds = sampleNumber[0].otu_ids;
     console.log(otuIds);
     
-    var otuLabels = sampleNumber.map(sample => sample.otu_labels);
+    var otuLabels = sampleNumber[0].otu_labels;
     console.log(otuLabels);
     
-    var sampleValues = sampleNumber.map(sample => sample.sample_values);
+    var sampleValues = sampleNumber[0].sample_values;
     console.log(sampleValues);
     
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
-    
-    var topTen = otuIds.sort((a,b) => (b.otuIds- a.otuIds));
+    var topTen = ((otuIds.sort((a,b) => (b.sampleValues- a.sampleValues))).slice(0, 10));
     console.log(topTen);
 
-    var yticks = topTen.slice(0, 10);
-    console.log(yticks);
+    var yticks = topTen.map(d => "OTU " + d);
+    console.log(`OTU IDS: ${yticks}`);
+
     // console.log(yticks);
     // 8. Create the trace for the bar chart. 
     var trace = {
@@ -109,13 +109,13 @@ function buildCharts(sample) {
     // 1. Create the trace for the bubble chart.
     var trace2 = {
       type: "bubble",
-      x: yticks,
+      x: otuIds,
       y: sampleValues,
       text: otuLabels,
       mode: 'markers',
       marker : {
         size : sampleValues,
-        color : yticks
+        color : otuIds
       }
     };
     var bubbleData = [trace2]
@@ -136,26 +136,40 @@ function buildCharts(sample) {
     console.log(getWash);
     // 2. Create a variable that holds the first sample in the metadata array.
     var firstWash = getWash[0];
-
+    console.log(firstWash);
     // 3. Create a variable that holds the washing frequency.
-    var washNum = getWash.wfreq;
+    var washNum = parseFloat(getWash[0].wfreq);
     // var washFreq = parseFloat(washNum);
     console.log(washNum);
     
     // 4. Create the trace for the gauge chart.
-    // var gaugeData = [
-    // type : "indicator",
-    // mode : "gauge + number",
-    // value : washNum,
-    // title : {'text: "Belley Button Washing Frequency", 'font' : {'size': 24}}
-    // ];
+    var gaugeData = [
+      {
+        domain : { x: [0,1], y: [0,1] }, 
+        type : "indicator",
+        mode : "gauge+number",
+        value : washNum,
+        title : { text: "Belley Button Washing Frequency", 'font' : {'size': 24} },
+        gauge: { 
+          axis: { visible:true, range: [0,9] },
+          bar: { color: "darkblue"},
+          steps: [
+            {range: [0, 10], color: "lightblue" },
+          ] },
+          
+    }];
     
-    // // 5. Create the layout for the gauge chart.
-    // var gaugeLayout = { 
+    // 5. Create the layout for the gauge chart.
+    var gaugeLayout = {  
+      width: 500,
+      height: 400,
+      margin: { t: 25, r: 25, l: 25, b: 25 },
+      paper_bgcolor: "lightyellow",
+      font: { color: "darkblue", family: "Arial" }
      
-    // };
+    };
 
-    // // 6. Use Plotly to plot the gauge data and layout.
-    // Plotly.newPlot();
+    // 6. Use Plotly to plot the gauge data and layout.
+    Plotly.newPlot("gauge", gaugeData, gaugeLayout);
   });
 }
